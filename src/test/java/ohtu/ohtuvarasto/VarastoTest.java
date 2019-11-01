@@ -13,6 +13,7 @@ import static org.junit.Assert.*;
 public class VarastoTest {
 
     Varasto varasto;
+    Varasto nollavarasto;
     double vertailuTarkkuus = 0.0001;
 
     @Before
@@ -23,6 +24,12 @@ public class VarastoTest {
     @Test
     public void konstruktoriLuoTyhjanVaraston() {
         assertEquals(0, varasto.getSaldo(), vertailuTarkkuus);
+    }
+    
+    @Test
+    public void konstruktoriLuoNollavaraston() {
+        nollavarasto = new Varasto(-10);
+        assertEquals(0, nollavarasto.getTilavuus(), vertailuTarkkuus);
     }
 
     @Test
@@ -36,6 +43,20 @@ public class VarastoTest {
 
         // saldon pitäisi olla sama kun lisätty määrä
         assertEquals(8, varasto.getSaldo(), vertailuTarkkuus);
+    }
+    
+    @Test
+    public void negatiivinenLisaysEiMuutaSaldoa() {
+        varasto.lisaaVarastoon(-8);
+        
+        assertEquals(0, varasto.getSaldo(), vertailuTarkkuus);
+    }
+    
+    @Test
+    public void liianSuuriLisaysEiKasvataSaldoaYliTilavuuden() {
+        varasto.lisaaVarastoon(12);
+        
+        assertEquals(varasto.getSaldo(), varasto.getTilavuus(), vertailuTarkkuus);
     }
 
     @Test
@@ -53,6 +74,24 @@ public class VarastoTest {
         double saatuMaara = varasto.otaVarastosta(2);
 
         assertEquals(2, saatuMaara, vertailuTarkkuus);
+    }
+    
+    @Test
+    public void negatiivinenOttaminenEiMahdollista() {
+        varasto.lisaaVarastoon(8);
+        
+        double saatuMaara = varasto.otaVarastosta(-2);
+        
+        assertEquals(0, saatuMaara, vertailuTarkkuus);
+    }
+    
+    @Test
+    public void ylisuuriOttaminenPalauttaaSaldon() {
+        varasto.lisaaVarastoon(8);
+        
+        double saatuMaara = varasto.otaVarastosta(10);
+        
+        assertEquals(8, saatuMaara, vertailuTarkkuus);
     }
 
     @Test
