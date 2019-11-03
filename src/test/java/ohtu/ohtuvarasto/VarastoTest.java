@@ -137,6 +137,7 @@ public class VarastoTest {
     
     @Test
     public void toStrigToimii() {
+        //lukemat on doubleja
         String oletettu = "saldo = 0.0, vielä tilaa 10.0";
         assertEquals(oletettu, varasto.toString());
     }
