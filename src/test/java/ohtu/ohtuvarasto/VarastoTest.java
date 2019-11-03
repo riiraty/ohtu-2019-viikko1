@@ -13,6 +13,7 @@ import static org.junit.Assert.*;
 public class VarastoTest {
 
     Varasto varasto;
+    Varasto alkusaldoVarasto;
     Varasto nollavarasto;
     double vertailuTarkkuus = 0.0001;
 
@@ -35,6 +36,36 @@ public class VarastoTest {
     @Test
     public void uudellaVarastollaOikeaTilavuus() {
         assertEquals(10, varasto.getTilavuus(), vertailuTarkkuus);
+    }
+    
+    @Test
+    public void saldoKonstruktoriAsettaaAnnetunTilavuuden() {
+        alkusaldoVarasto = new Varasto(10, 8);
+        assertEquals(10, alkusaldoVarasto.getTilavuus(), vertailuTarkkuus);
+    }
+    
+    @Test
+    public void saldoKonstruktoriNollaaNegTilavuuden() {
+        alkusaldoVarasto = new Varasto(-10, 8);
+        assertEquals(0, alkusaldoVarasto.getTilavuus(), vertailuTarkkuus);
+    }
+    
+    @Test
+    public void saldoKonstruktoriNollaaNegAlkusaldon() {
+        alkusaldoVarasto = new Varasto(10, -8);
+        assertEquals(0, alkusaldoVarasto.getSaldo(), vertailuTarkkuus);
+    }
+    
+    @Test
+    public void saldoKonstruktoriAsettaaAlkusaldonKunMahtuu() {
+        alkusaldoVarasto = new Varasto(10, 8);
+        assertEquals(8, alkusaldoVarasto.getSaldo(), vertailuTarkkuus);
+    }
+    
+    @Test
+    public void saldoKonstruktoriTayttaaVarastonJaHukkaaLoput() {
+        alkusaldoVarasto = new Varasto(10, 12);
+        assertEquals(10, alkusaldoVarasto.getSaldo(), vertailuTarkkuus);
     }
 
     @Test
@@ -102,6 +133,12 @@ public class VarastoTest {
 
         // varastossa pitäisi olla tilaa 10 - 8 + 2 eli 4
         assertEquals(4, varasto.paljonkoMahtuu(), vertailuTarkkuus);
+    }
+    
+    @Test
+    public void toStrigToimii() {
+        String oletettu = "saldo = 0.0, vielä tilaa 10.0";
+        assertEquals(oletettu, varasto.toString());
     }
 
 }
